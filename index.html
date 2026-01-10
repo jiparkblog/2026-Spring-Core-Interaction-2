@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2026 Spring Core Interaction 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ::selection {
+            background: #8a14ff;
+            color: #fff;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: #000;
+            background: #fff;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .left {
+            width: 20%;
+            padding: 1.5vw;
+            font-size: 1vw;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .left br {
+            display: block;
+            content: "";
+            margin-top: 0.8em;
+        }
+
+        .clock {
+            margin-top: 1.2em;
+            display: inline-block;
+        }
+
+        .clock svg {
+            width: 3vw;
+            height: 3vw;
+            min-width: 30px;
+            min-height: 30px;
+        }
+
+        .hour-hand {
+            transform-origin: 50px 50px;
+            animation: hourRotate 30s ease-in-out infinite;
+        }
+
+        .minute-hand {
+            transform-origin: 50px 50px;
+            animation: minuteRotate 30s ease-in-out infinite;
+        }
+
+        @keyframes hourRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(80deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        @keyframes minuteRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(240deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        .right {
+            width: 80%;
+            padding: 1vw;
+            font-size: 3.5vw;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+        }
+
+        .right br {
+            display: block;
+            content: "";
+            margin-top: 0.4em;
+        }
+
+        .misbehave, .break {
+            display: inline-block;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left,
+            .right {
+                width: 100%;
+                padding: 4vw;
+            }
+
+            .left {
+                font-size: 5vw;
+            }
+
+            .right {
+                font-size: 10vw;
+            }
+
+            .clock svg {
+                width: 15vw;
+                height: 15vw;
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .left {
+                font-size: 0.8vw;
+            }
+
+            .right {
+                font-size: 3vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            Parsons School of Art, Media, and Technology: Communication Design
+            <br><br>
+            PUCD 2125
+            <br>
+            Spring 2026
+          
+         
+            <br>
+                <div class="clock">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Clock face -->
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#000" stroke-width="2"/>
+
+                    <!-- Hour markers -->
+                    <line x1="50" y1="10" x2="50" y2="15" stroke="#000" stroke-width="2"/>
+                    <line x1="85" y1="28" x2="81" y2="31" stroke="#000" stroke-width="2"/>
+                    <line x1="90" y1="50" x2="85" y2="50" stroke="#000" stroke-width="2"/>
+                    <line x1="85" y1="72" x2="81" y2="69" stroke="#000" stroke-width="2"/>
+                    <line x1="50" y1="90" x2="50" y2="85" stroke="#000" stroke-width="2"/>
+                    <line x1="15" y1="72" x2="19" y2="69" stroke="#000" stroke-width="2"/>
+                    <line x1="10" y1="50" x2="15" y2="50" stroke="#000" stroke-width="2"/>
+                    <line x1="15" y1="28" x2="19" y2="31" stroke="#000" stroke-width="2"/>
+
+                    <!-- Hour hand pointing to 9 -->
+                    <line class="hour-hand" x1="50" y1="50" x2="30" y2="50" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+
+                    <!-- Minute hand pointing to 12 -->
+                    <line class="minute-hand" x1="50" y1="50" x2="50" y2="20" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+
+                    <!-- Center dot -->
+                    <circle cx="50" cy="50" r="3" fill="#000"/>
+                </svg>
+            </div>
+            <br>
+            9:00 — 11:40 AM
+<br>
+   Tuesdays, Thursdays
+        
+<br><br>
+Class are.na (TBD)
+<br>
+Syllabus (TBD)
+
+<br><br>
+            Parsons 2 W 13th ROOM 1201
+            <br><br>
+            Ji Park<br>
+            <a href="mailto:parkj2@newschool.edu">parkj2@newschool.edu</a><br>
+            <a href="https://jipark.org" target="_blank">jipark.org</a>
+        </div>
+
+        <div class="right">
+            Core Interaction 2 is a studio course about building interactive systems that behave and <span class="misbehave">misbehave</span>.
+            <br><br>
+            We'll explore the web as a medium, not just a container for content. We prioritize process, iteration, and intentional experimentation.
+            <br><br>
+            We're here for breaking things on purpose, failed attempts, process over product, iteration as practice. Things will <span class="break">break</span> and that's the work :)
+        </div>
+    </div>
+
+    <script>
+        const misbehaveEl = document.querySelector('.misbehave');
+        const breakEl = document.querySelector('.break');
+        const misbehaveText = 'misbehave';
+        const breakText = 'break';
+
+        function shuffleText(text) {
+            const letters = text.split('');
+            for (let i = letters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [letters[i], letters[j]] = [letters[j], letters[i]];
+            }
+            return letters.join('');
+        }
+
+        function animateWord(element, originalText) {
+            let counter = 0;
+
+            function cycle() {
+                counter++;
+                if (counter <= 3) {
+                    element.textContent = shuffleText(originalText);
+                    setTimeout(cycle, 2000);
+                } else {
+                    element.textContent = originalText;
+                    counter = 0;
+                    setTimeout(cycle, 3000);
+                }
+            }
+
+            cycle();
+        }
+
+        animateWord(misbehaveEl, misbehaveText);
+        animateWord(breakEl, breakText);
+    </script>
+</body>
+</html>
