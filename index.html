@@ -19,7 +19,11 @@
         body {
             font-family: Arial, sans-serif;
             color: #000;
-            background: #fff;
+            background: #ffffff;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         .container {
@@ -33,6 +37,11 @@
             font-size: 1vw;
             line-height: 1.2;
             letter-spacing: -0.01em;
+            position: sticky;
+            top: 0;
+            align-self: flex-start;
+            max-height: 100vh;
+            overflow-y: auto;
         }
 
         .left br {
@@ -63,8 +72,9 @@
             animation: minuteRotate 30s ease-in-out infinite;
         }
         .weekly{
-              font-size: 2vw;
+              font-size: 1.5vw;
             line-height: 1.2;
+            padding-bottom:40px;
         }
 
         @keyframes hourRotate {
@@ -132,11 +142,12 @@
 
         a {
             color: #000;
-            text-decoration: none;
+            text-decoration: underline;
         }
 
         a:hover {
-            text-decoration: underline;
+            background: #8a14ff;
+            color:white;
         }
 
         /* Responsive adjustments */
@@ -152,11 +163,14 @@
             }
 
             .left {
-                font-size: 5vw;
+                font-size: 3vw;
+                position: static;
+                max-height: none;
+                overflow-y: visible;
             }
 
             .right {
-                font-size: 10vw;
+                font-size: 7vw;
             }
              .accordion-content.active {
 
@@ -174,7 +188,7 @@
 
         @media (min-width: 1920px) {
             .left {
-                font-size: 0.8vw;
+                font-size: 1vw;
             }
 
             .right {
@@ -227,7 +241,7 @@
 <br><br>
 → Class are.na (TBD)
 <br>
-→ Syllabus (TBD)
+→ <a href="#syllabus">Syllabus (TBD)</a>
 
 <br><br>
             Parsons 2 W 13th ROOM 1201
@@ -235,6 +249,23 @@
             Ji Park<br>
             <a href="mailto:parkj2@newschool.edu">parkj2@newschool.edu</a><br>
             <a href="https://jipark.org" target="_blank">jipark.org</a>
+            <br><br>
+            People
+            <br>
+            Anderson William Anderson,
+            Cho Chang Bin,
+            Deshpande Jui,
+            French Aidan,
+            Garg Ridhvi,
+            Hoffman-Ingall Shirley,	
+            Khanna Akshat,	
+            Kim Hanna,	
+            Lau Natalie,	
+            Lauzan Justina,	
+            Lu Ho-Ting,	
+            Vaccarella Ava,	
+            Vraalsen Ella,	
+            Zhang Arina	
         </div>
 
         <div class="right">
@@ -245,19 +276,30 @@
             We're here for breaking things on purpose, failed attempts, process over product, iteration as practice. Things will <span class="break">break</span> and that's the work :)
             <br>
             <br>
-            Syllabus (TBD)
-            <br>
+            <span id="syllabus">Syllabus (TBD)</span>
+       
              <br>
              <div class="weekly">
+      <br>
                 <div class="accordion-title">Week 1 (Thu 01/22)<br>Foundations</div>
                 <div class="accordion-content active">
 <br>
 Lecture: What is the internet?
 <ul style="margin-left: 2em; margin-top: 0.5em;">
-<li>Infrastructure: servers, cables, protocols, who owns what</li>
-<li>The internet vs the web (they're not the same thing)</li>
-<li>Decentralization dreams vs corporate consolidation</li>
-<li>Who built it? Who maintains it? Who profits?</li>
+<li>What is the internet? Infrastructure: servers, cables, protocols, who owns what
+    <br>
+    <img src="cable.jpeg" style="width:300px;padding:10px 10px">
+     </li>
+<li>Internet vs web </li>
+<li>Decentralization dream vs corporate consolidation</li>
+<li>Who actually built this thing? Who keeps it running? Who's making money from it?</li>
+</ul>
+<br>
+Read
+<ul style="margin-left: 2em; margin-top: 0.5em;">
+<li><a href = "https://lab.cccb.org/en/the-i-in-the-internet/">The I in the Internet</a> by <i>Jia Tolentino</i> </li>
+<li>"Women in the integrated circuit" (pp. 2-14), <a href="https://attachments.are.na/15715837/4daa03fa5a10240cca6e3b8f56ec14ac.pdf?1648036244">A Cyborg Manifesto</a> by <i>Donna Haraway</i> </li>
+<li><a href = "https://sexworkersbuilttheinter.net/"> Sex Workers Built Internet</a> </li>
 </ul>
                 </div>
              </div>
@@ -304,12 +346,17 @@ Lecture: What is the internet?
         animateWord(breakEl, breakText);
 
         // Accordion functionality
+        const accordionToggle = document.querySelector('.accordion-toggle');
         const accordionTitle = document.querySelector('.accordion-title');
         const accordionContent = document.querySelector('.accordion-content');
 
-        accordionTitle.addEventListener('click', function() {
+        function toggleAccordion() {
             accordionContent.classList.toggle('active');
-        });
+            accordionToggle.textContent = accordionContent.classList.contains('active') ? '-' : '+';
+        }
+
+        accordionToggle.addEventListener('click', toggleAccordion);
+        accordionTitle.addEventListener('click', toggleAccordion);
     </script>
 </body>
 </html>
