@@ -29,11 +29,13 @@
         .container {
             display: flex;
             min-height: 100vh;
+            padding-bottom: 64px;
         }
 
-        .left {
+        .left,
+        .chat {
             width: 20%;
-            padding: 1.5vw;
+            padding: 10px;
             font-size: 1vw;
             line-height: 1.2;
             letter-spacing: -0.01em;
@@ -102,12 +104,26 @@
         }
 
         .right {
-            width: 80%;
+            width: 60%;
             padding: 1vw;
-            font-size: 3.5vw;
+            font-size: 3vw;
             line-height: 1.1;
             letter-spacing: -0.01em;
         }
+
+        .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            padding-bottom: 1em;
+            word-break: break-word;
+        }
+
+        .chat-timestamp {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+
 
         .right br {
             display: block;
@@ -115,7 +131,7 @@
             margin-top: 0.4em;
         }
 
-        .misbehave, .break {
+        .misbehave {
             display: inline-block;
         }
 
@@ -150,6 +166,23 @@
             color:white;
         }
 
+        .message-input-wrap {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+
+            padding: 10px;
+            z-index: 20;
+        }
+
+        .message-input {
+   
+            height: 30px;
+            width: 100%;
+            text-align: center;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
@@ -157,12 +190,20 @@
             }
 
             .left,
+            .chat,
             .right {
                 width: 100%;
                 padding: 4vw;
             }
 
             .left {
+                font-size: 4.5vw;
+                position: static;
+                max-height: none;
+                overflow-y: visible;
+            }
+
+            .chat {
                 font-size: 4.5vw;
                 position: static;
                 max-height: none;
@@ -268,8 +309,13 @@
             Zhang Arina	
         </div>
 
+        <div class="chat">
+            <div class="chat-messages" id="chat-messages"></div>
+        </div>
+
         <div class="right">
             🪦 01.2026 — 05.2026
+
             <br>
             <br>
             Core Interaction 2 Class ran January–May 2026. 14 students, 28 classes.
@@ -280,8 +326,7 @@
             <br>
             <br>
             We read legends like Lialina, Steyerl, Haraway and worked through the history of the web, positive friction, AI Slops, AI ethics (yes, we talked about Palantir),
-            and spent a lot of time asking what higher design education is actually for, who it serves, and what it leaves out. We didn't find an answer yet lol!
-            <br>
+            and we asked a lot of questions we couldn't answer because we're all still figuring out what it means :) 
             <br>
          
              </div>
@@ -291,11 +336,50 @@
         </div>
     </div>
 
-    <script>
+    <div class="message-input-wrap">
+        <input class="message-input" id="message-input" type="text" placeholder="Type a message and press Enter">
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            query,
+            orderBy,
+            onSnapshot,
+            serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
+
         const misbehaveEl = document.querySelector('.misbehave');
-        const breakEl = document.querySelector('.break');
         const misbehaveText = 'misbehave';
-        const breakText = 'break';
+        const chatMessagesEl = document.querySelector('#chat-messages');
+        const messageInputEl = document.querySelector('#message-input');
+        let unsubscribeMessages = null;
+
+        // Replace this object with your Firebase project config from Project settings.
+        const firebaseConfig = {
+            apiKey: 'AIzaSyB85yhTw5f7McavicRujgHdSohKr1K2yR4',
+            authDomain: 'core-interaction-c0d44.firebaseapp.com',
+            projectId: 'core-interaction-c0d44',
+            storageBucket: 'core-interaction-c0d44.firebasestorage.app',
+            messagingSenderId: '643558967895',
+            appId: '1:643558967895:web:5aaf0b0fe36ac40bf2b112'
+        };
+
+        const hasFirebaseConfig = !Object.values(firebaseConfig).some((value) =>
+            String(value).startsWith('PASTE_')
+        );
+
+        let messagesCollection = null;
+        if (hasFirebaseConfig) {
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+            messagesCollection = collection(db, 'messages');
+        } else if (chatMessagesEl) {
+            chatMessagesEl.textContent = 'Firebase not configured yet. Paste your config to enable shared chat.';
+        }
 
         function shuffleText(text) {
             const letters = text.split('');
@@ -324,21 +408,63 @@
             cycle();
         }
 
-        animateWord(misbehaveEl, misbehaveText);
-        animateWord(breakEl, breakText);
-
-        // Accordion functionality
-        const accordionToggle = document.querySelector('.accordion-toggle');
-        const accordionTitle = document.querySelector('.accordion-title');
-        const accordionContent = document.querySelector('.accordion-content');
-
-        function toggleAccordion() {
-            accordionContent.classList.toggle('active');
-            accordionToggle.textContent = accordionContent.classList.contains('active') ? '-' : '+';
+        if (misbehaveEl) {
+            animateWord(misbehaveEl, misbehaveText);
         }
 
-        accordionToggle.addEventListener('click', toggleAccordion);
-        accordionTitle.addEventListener('click', toggleAccordion);
+        function formatTimestamp(dateInput) {
+            const now = dateInput instanceof Date ? dateInput : new Date(dateInput);
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const year = String(now.getFullYear());
+            const hours24 = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const amPm = hours24 >= 12 ? 'pm' : 'am';
+            const hours12 = hours24 % 12 || 12;
+            return `[${month}.${day}.${year} ${hours12}:${minutes}${amPm}]`;
+        }
+
+        function renderMessage(message, createdAt) {
+            if (!chatMessagesEl) return;
+            const messageEl = document.createElement('div');
+            messageEl.className = 'chat-message';
+            const timestampEl = document.createElement('span');
+            timestampEl.className = 'chat-timestamp';
+            timestampEl.textContent = `${formatTimestamp(createdAt)} `;
+            messageEl.appendChild(timestampEl);
+            messageEl.appendChild(document.createTextNode(message));
+            chatMessagesEl.appendChild(messageEl);
+            chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        }
+
+        function startRealtimeMessages() {
+            if (!messagesCollection || !chatMessagesEl) return;
+            const messagesQuery = query(messagesCollection, orderBy('createdAt', 'asc'));
+            unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+                chatMessagesEl.innerHTML = '';
+                snapshot.forEach((docSnapshot) => {
+                    const data = docSnapshot.data();
+                    const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : new Date();
+                    renderMessage(data.text || '', createdAt);
+                });
+            });
+        }
+
+        if (messageInputEl) {
+            messageInputEl.addEventListener('keydown', async (event) => {
+                if (event.key !== 'Enter') return;
+                const message = messageInputEl.value.trim();
+                if (!message) return;
+                if (!messagesCollection) return;
+                await addDoc(messagesCollection, {
+                    text: message,
+                    createdAt: serverTimestamp()
+                });
+                messageInputEl.value = '';
+            });
+        }
+
+        startRealtimeMessages();
     </script>
 </body>
 </html>
